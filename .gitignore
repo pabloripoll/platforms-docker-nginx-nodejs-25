@@ -28,12 +28,12 @@ dist-ssr
 *.local
 
 # Repository
-vault
+/vault
 /platform/nginx-nodejs/docker/config/supervisor/conf.d
 !/platform/nginx-nodejs/docker/config/supervisor/conf.d/.gitkeep
-resources/database/*
-!resources/database/.gitignore
-resources/docs/webapp/project/*
-!resources/docs/webapp/project/.gitignore
-webapp/*
-!webapp/.gitignore
+/resources/database/*
+!/resources/database/.gitignore
+/resources/docs/webapp/project/*
+!/resources/docs/webapp/project/.gitignore
+/webapp/*
+!/webapp/.gitkeep
