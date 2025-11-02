@@ -138,10 +138,9 @@ $ make local-hostname
 For custom configurations, there is a `./platform/nginx-nodejs/docker/config/supervisor/conf.d-sample` directory with **Supervisord** services. Copy the main two services required for the **webapp** container startup.
 ```bash
 $ cd ./platform/nginx-nodejs/docker/config/supervisor
-$ cp conf.d-sample/nginx.conf conf.d-sample/index.conf conf.d/
-$ ls -l ./conf.d
--rw-rw-r-- 1 user user 193 Oct 03 18:50 index.conf
--rw-rw-r-- 1 user user 201 Oct 03 18:50 nginx.conf
+$ cp -vn conf.d-sample/nginx.conf conf.d-sample/index.conf conf.d/
+'conf.d-sample/nginx.conf' -> 'conf.d/nginx.conf'
+'conf.d-sample/index.conf' -> 'conf.d/index.conf'
 ```
 
 Create and start up the web app container
