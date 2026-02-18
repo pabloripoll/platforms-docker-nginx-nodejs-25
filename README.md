@@ -141,9 +141,9 @@ NGINX 404 ERROR
 ```
 <br>
 
-To preview the successful installation on browser, there is a basic landing page sample at `./resources/docs/webapp-sample/`. Copy its content into `./webapp` directory
+To preview the successful installation on browser, there is a basic landing page sample at `./resources/webapp-sample/`. Copy its content into `./webapp` directory
 ```bash
-$ cp -ra ./resources/docs/webapp-sample/. ./webapp
+$ cp -a ./resources/webapp-sample/. ./webapp
 ```
 
 Create and start up the web app container
@@ -179,8 +179,19 @@ $ sudo docker stats
 
 Also there is a **useful GNU Make recipe** to see the container relevant information. This is important when project is in **dev mode** inside the container. So, you would see the framework development stage on Docker IP port, e.g. `http://172.18.0.2:3000` - *NOT ON YOUR MACHINE LOCALHOST - 127.0.0.1*
 
+Output example:
 ```bash
 $ make webapp-info
+
+PLATFORMS DOCKER: NGINX - NODEJS 25
+Container ID.: 6dcc29b09476
+Name.........: abbr-mp-webapp-dev                             # Container name
+Image........: abbr-mp-webapp-dev:alpine3.23-nginx-nodejs25   # Container image
+Memory.......: 128M
+Host.........: 127.0.0.1:7001                                 # Address binded to container port 80
+Hostname.....: 192.168.1.41:7001                              # Local Hostname
+Docker.Host..: 172.18.0.2                                     # Docker IP
+NetworkID....: 8cf47eba68e3fabc1365de3eaff0330c22ee8519e34dd338a791d2ca7d40768f
 ```
 <br>
 

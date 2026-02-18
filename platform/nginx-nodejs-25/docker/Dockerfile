@@ -1,8 +1,6 @@
-ARG ALPINE_VERSION=3.22.0
-ARG NODE_VERSION=22.16.0
-
-FROM node:${NODE_VERSION}-alpine AS node
-FROM alpine:${ALPINE_VERSION}
+# https://hub.docker.com/_/node
+FROM node:25-alpine AS node
+FROM alpine:3.23
 
 ARG UID
 ARG GID
@@ -84,7 +82,7 @@ RUN touch ~/.profile
 RUN source ~/.profile
 
 # Container ports for static, SSL, preview / dev and server-site rendering
-EXPOSE 80 443 3000 8080
+EXPOSE 80 3000 8080
 
 # Let supervisord start nginx & php-fpm
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
