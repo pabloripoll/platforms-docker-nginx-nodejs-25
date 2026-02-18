@@ -2,9 +2,7 @@
     <img src="./resources/docs/images/pr-banner-long.png">
 </div>
 
-# INFRASTRUCTURE PLATFORM
-
-# NGINX 1.28, NODEJS 22.16
+# INFRASTRUCTURE PLATFORM NODEJS 22
 
 ## Repository Overview
 
@@ -50,8 +48,8 @@ If you won't use GNU Make, Docker commands will have to be executed from within 
 
 It can be installed the most known JS **front-end** frameworks:
 
-- [Angular](https://angular.dev/)
 - [React](https://react.dev/)
+- [Angular](https://angular.dev/) *(Container requires at least 1GB RAM)*
 - [Vue3](https://vuejs.org/)
 - [Svelte](https://svelte.dev/)
 - Others...
@@ -120,18 +118,11 @@ Set up the web application container
 ```bash
 $ make webapp-set
 ```
-<div style="with:100%;height:auto;text-align:center;">
-    <img src="./resources/docs/images/make-webapp-set.jpg">
-</div>
 
 Watch the local hostname IP on which Docker serves and the ports assigned, even though the web app can be accessed through `http://127.0.0.1` or `http://localhost`
 ```bash
 $ make local-hostname
 ```
-<div style="with:100%;height:auto;text-align:center;">
-    <img src="./resources/docs/images/make-local-hostname.jpg">
-</div>
-<br>
 
 ## <a id="create-containers"></a>Build and run the Web Application Container
 
@@ -143,69 +134,60 @@ $ cp -vn conf.d-sample/nginx.conf conf.d-sample/index.conf conf.d/
 'conf.d-sample/index.conf' -> 'conf.d/index.conf'
 ```
 
+<span color="orange"><b>IMPORTANT:</b></span> Before building the container, the Nginx server block serves at port 80 proxing to port 8080 to be handled by NodeJS. On first installation will throw 404 error if no project is developed inside.
+
+```
+NGINX 404 ERROR
+```
+<br>
+
+To preview the successful installation on browser, there is a basic landing page sample at `./resources/docs/webapp-sample/`. Copy its content into `./webapp` directory
+```bash
+$ cp -ra ./resources/docs/webapp-sample/. ./webapp
+```
+
 Create and start up the web app container
 ```bash
 $ make webapp-create
 ```
-<div style="with:100%;height:auto;text-align:center;">
-    <img src="./resources/docs/images/make-webapp-create.jpg">
-</div>
 <br>
 
-<span color="orange"><b>IMPORTANT:</b></span> Once the container is built and running, the Nginx server block serves at port 80 proxing to port 8080 to be handled by NodeJS. On first installation will fail as it is needing to install the required packages with NPM from inside the container.
-
-<div style="with:100%;height:auto;text-align:center;">
-    <img src="./resources/docs/images/test-containers-failed.jpg">
-</div>
-<br>
-
-To preview the successful installation on browser, there is a basic home page sample at `./resources/docs/webapp/default-install/`. Copy its content into `./webapp` directory
-```bash
-$ cp -a ./resources/docs/webapp/default-install/. ./webapp
-```
-
-Then, access into the container to install require NodeJS packages and restart the container
+For any further change in the binded `./webapp` directory, access into the container to install require NodeJS packages and restart the container
 ```bash
 $ make webapp-ssh
 
 /var/www $ npm install
-/var/www $ exit
+
+# Option 1: restart Supervisord service that runs nodejs
 /var/www $ sudo supervisorctl restart index # service that runs node --watch /var/www/index.js
+
+# Option 2: restart container
+/var/www $ exit
+$ make webapp-restart
 ```
-<div style="with:100%;height:auto;text-align:center;">
-    <img src="./resources/docs/images/test-containers-installation.jpg">
-</div>
 <br>
 
 Now you can see on browser the NodeJS application running
-<div style="with:100%;height:auto;text-align:center;">
-    <img src="./resources/docs/images/test-containers-success.jpg">
-</div>
 <br>
 
 Docker information of both cointer up and running
-<div style="with:100%;height:auto;text-align:center;">
-    <img src="./resources/docs/images/docker-ps-a.jpg">
-</div>
-<div style="with:100%;height:auto;text-align:center;">
-    <img src="./resources/docs/images/docker-stats.jpg">
-</div>
+```bash
+$ sudo docker ps -a
+$ sudo docker stats
+```
 <br>
 
 Also there is a **useful GNU Make recipe** to see the container relevant information. This is important when project is in **dev mode** inside the container. So, you would see the framework development stage on Docker IP port, e.g. `http://172.18.0.2:3000` - *NOT ON YOUR MACHINE LOCALHOST - 127.0.0.1*
 
-<div style="with:100%;height:auto;text-align:center;">
-    <img src="./resources/docs/images/make-webapp-info.jpg">
-</div>
+```bash
+$ make webapp-info
+```
 <br>
 
 Despite the container can be stop or restarted, it can be stop and destroy to clean up locally from Docker generated cache, without affecting other containers running on the same machine.
 ```bash
 $ make webapp-destroy
 ```
-<div style="with:100%;height:auto;text-align:center;">
-    <img src="./resources/docs/images/make-webapp-destroy.jpg">
-</div>
 <br>
 
 ## <a id="make-help"></a>GNU Make file recipes
@@ -213,10 +195,27 @@ $ make webapp-destroy
 The project's main `./Makefile` contains recipes with the commands required to manage each platform's Makefile from the project root.
 
 This streamlines the workflow for managing the container with mnemonic recipe names, avoiding the effort of remembering and typing each bash command line.
-
-<div style="with:100%;height:auto;text-align:center;">
-    <img src="./resources/docs/images/make-help.jpg">
-</div>
+```bash
+$ make help
+Usage: $ make [target]
+Targets:
+$ make help                           shows this Makefile help message
+$ make local-hostname                 shows local machine ip and container ports set
+$ make local-ownership                shows local ownership
+$ make local-ownership-set            sets recursively local root directory ownership
+$ make webapp-hostcheck               shows this project ports availability on local machine for webapp container
+$ make webapp-info                    shows the webapp docker related information
+$ make webapp-set                     sets the webapp enviroment file to build the container
+$ make webapp-create                  creates the webapp container from Docker image
+$ make webapp-network                 creates the webapp container network - execute this recipe first before others
+$ make webapp-ssh                     enters the webapp container shell
+$ make webapp-start                   starts the webapp container running
+$ make webapp-stop                    stops the webapp container but its assets will not be destroyed
+$ make webapp-restart                 restarts the running webapp container
+$ make webapp-destroy                 destroys completly the webapp container
+$ make repo-flush                     echoes clearing commands for git repository cache on local IDE and sub-repository tracking remove
+$ make repo-commit                    echoes common git commands
+```
 <br>
 
 ## <a id="platform-usage"></a>Use this Platform Repository for your Web Application Project

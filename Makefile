@@ -20,20 +20,13 @@ endif
 
 include .env
 
-WEBAPP_BRANCH:=develop
-WEBAPP_PROJECT:=$(PROJECT_NAME) - APPWEB
-WEBAPP_CONTAINER:=$(addsuffix -$(WEBAPP_CAAS), $(PROJECT_LEAD))
-
-DATABASE_CONTAINER:=$(addsuffix -$(DATABASE_CAAS), $(PROJECT_LEAD))
-
 ROOT_DIR=$(patsubst %/,%,$(dir $(realpath $(firstword $(MAKEFILE_LIST)))))
 DIR_BASENAME=$(shell basename $(ROOT_DIR))
-
-.PHONY: help
 
 # -------------------------------------------------------------------------------------------------
 #  Help
 # -------------------------------------------------------------------------------------------------
+.PHONY: help
 
 help: ## shows this Makefile help message
 	echo "Usage: $$ make "${C_GRN}"[target]"${C_END}
@@ -93,7 +86,7 @@ webapp-restart: ## restarts the running webapp container
 
 webapp-destroy: ## destroys completly the webapp container
 	echo ${C_RED}"Attention!"${C_END};
-	echo ${C_YEL}"You're about to remove the "${C_BLU}"$(WEBAPP_PROJECT)"${C_END}" container and delete its image resource."${C_END};
+	echo ${C_YEL}"You're about to remove the "${C_BLU}"$(WEBAPP_PLTF)"${C_END}" container and delete its image resource."${C_END};
 	@echo -n ${C_RED}"Are you sure to proceed? "${C_END}"[y/n]: " && read response && if [ $${response:-'n'} != 'y' ]; then \
         echo ${C_GRN}"K.O.! container has been stopped but not destroyed."${C_END}; \
     else \
@@ -112,11 +105,17 @@ webapp-destroy: ## destroys completly the webapp container
 # -------------------------------------------------------------------------------------------------
 .PHONY: repo-flush repo-commit
 
-repo-flush: ## clears local git repository cache specially for updating .gitignore on local IDE
-	git rm -rf --cached .; git add .; git commit -m "fix: cache cleared for untracked files"
+repo-flush: ## echoes clearing commands for git repository cache on local IDE and sub-repository tracking remove
+	echo ${C_YEL}"Clear repository for untracked files:"${C_END}
+	echo ${C_YEL}"$$"${C_END}" git rm -rf --cached .; git add .; git commit -m \"maint: cache cleared for untracked files\""
+	echo ""
+	echo ${C_YEL}"Platform repository against REST API repository:"${C_END}
+	echo ${C_YEL}"$$"${C_END}" git rm -r --cached -- \"apirest/*\" \":(exclude)apirest/.gitkeep\""
 
 repo-commit: ## echoes common git commands
-	echo "git add . && git commit -m \"feat: ... \" && git push -u origin [branch]"
+	echo ${C_YEL}"Common commiting commands:"${C_END}
+	echo ${C_YEL}"$$"${C_END}" git add . && git commit -m \"feat: ... \""
+	echo ""
 	echo ${C_YEL}"For fixing pushed commit comment:"${C_END}
-	echo "git commit --amend"
-	echo "git push --force origin [branch]"
+	echo ${C_YEL}"$$"${C_END}" git commit --amend"
+	echo ${C_YEL}"$$"${C_END}" git push --force origin [branch]"

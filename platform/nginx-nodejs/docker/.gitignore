@@ -1,0 +1,8 @@
+# .gitignore custom settings
+.env
+/config/nginx/conf.d/*
+!/config/nginx/conf.d/.gitkeep
+/config/nodejs/conf.d/*
+!/config/nodejs/conf.d/.gitkeep
+/config/supervisor/conf.d/*
+!/config/supervisor/conf.d/.gitkeep
