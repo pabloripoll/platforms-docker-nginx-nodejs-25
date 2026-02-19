@@ -6,3 +6,4 @@
 !/config/nodejs/conf.d/.gitkeep
 /config/supervisor/conf.d/*
 !/config/supervisor/conf.d/.gitkeep
+/config/supervisor/supervisord.conf
