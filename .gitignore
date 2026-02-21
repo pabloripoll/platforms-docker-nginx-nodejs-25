@@ -44,14 +44,14 @@ lerna-debug.log*
 # Platforms
 
 # Project Schemas Samples
-/resources/docs/webapp/*
-!/resources/docs/webapp/.gitkeep
+/resources/docs/application/*
+!/resources/docs/application/.gitkeep
 
 # API content
 /apirest/*
 !/apirest/.gitkeep
-/webapp/*
-!/webapp/.gitkeep
+/application/*
+!/application/.gitkeep
 
 # Personal developer vault
 /vault
