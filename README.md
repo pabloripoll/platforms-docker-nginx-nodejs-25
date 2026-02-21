@@ -2,7 +2,7 @@
     <img src="./resources/docs/images/pr-banner-long.png">
 </div>
 
-# INFRASTRUCTURE PLATFORM NODEJS 22
+# INFRASTRUCTURE PLATFORM NODEJS 25
 
 ## Repository Overview
 
@@ -10,11 +10,11 @@ This Infrastructure Platform repository provides a dedicated Node.js stack for f
 
 ### Modular and Decoupled Design
 
-A key feature of this repository is its modular design: it is intentionally decoupled from its sub-directory `./webapp`, allowing the platform to be maintained independently without impacting the associated subproject. This separation supports dedicated upkeep and flexibility for both the platform and its detached web application.
+A key feature of this repository is its modular design: it is intentionally decoupled from its sub-directory `./application`, allowing the platform to be maintained independently without impacting the associated subproject. This separation supports dedicated upkeep and flexibility for both the platform and its detached web application.
 
 ### Multi-instance Local Development
 
-Additionally, the platform is designed to support running multiple development versions of the ./webapp simultaneously, simply by adjusting a few environment settings to differentiate each container instance. It is highly configurable to accommodate various infrastructure or machine requirements, allowing developers to easily tailor parameters such as container RAM allocation, port assignments, and other platform settings to best fit their local or deployment environment.
+Additionally, the platform is designed to support running multiple development versions of the `./application` simultaneously, simply by adjusting a few environment settings to differentiate each container instance. It is highly configurable to accommodate various infrastructure or machine requirements, allowing developers to easily tailor parameters such as container RAM allocation, port assignments, and other platform settings to best fit their local or deployment environment.
 <br>
 
 ## Content of this page:
@@ -35,7 +35,7 @@ Despite Docker’s cross-platform compatibility, for intermediate to advanced so
 - **Docker Compose**: Manages multi-container setups and dependencies.
 - **GNU Make**: Automates build commands and workflows *(otherwise, commands must be executed manually)*.
 
-If you won't use GNU Make, Docker commands will have to be executed from within the `./platform/nginx-nodejs/docker` directory.
+If you won't use GNU Make, Docker commands will have to be executed from within the `./platform/nginx-nodejs-25/docker` directory.
 
 | Dev machine   | Machine's features                                                                            |
 | ------------- | --------------------------------------------------------------------------------------------- |
@@ -62,24 +62,24 @@ Take into account that each framework will demand its specific configuration fro
 
 The container instance has its dedicated GNU Make and the core Docker directory which contains the scripts and stack assets to build the required platform configuration.
 
-Also, there is a copy at `./resources/docs/platform/` directory to contain the exact or the alternated scripts, so you can save or backup the different SDLC required configuration *(e.g. Testing, Staging, Production)*.
+Also, there is a copy at `./resources/application/` directory to contain the exact or the alternated scripts, so you can save or backup the different SDLC required configuration *(e.g. Testing, Staging, Production)*.
 
 **Stack:**
-- Linux Alpine version 3.22
+- Linux Alpine version 3.23
 - NGINX version 1.28 *(or the latest on Alpine Package Keeper)*
-- NodeJS 22.16 with NPM and YARN installed
+- NodeJS 25 with NPM and YARN installed
 <br><br>
 
-> **Note**: There is a `./platform/nginx-nodejs/docker/.env.example` file with the variables required to build the container by `docker-compose.yml` file to create the container if no GNU Make is available on developer's machine. Otherwise, it is not required to create its `.env` manually file for building the container. web app environment: `./platform/nginx-nodejs/docker/.env`
+> **Note**: There is a `./platform/nginx-nodejs-25/docker/.env.example` file with the variables required to build the container by `docker-compose.yml` file to create the container if no GNU Make is available on developer's machine. Otherwise, it is not required to create its `.env` manually file for building the container. web app environment: `./platform/nginx-nodejs-25/docker/.env`
 
 ```bash
 COMPOSE_PROJECT_LEAD="myproj"
 COMPOSE_PROJECT_CNET="mp-dev"
 COMPOSE_PROJECT_IMGK="alpine3.22-nginx1.26-njs22.16"
-COMPOSE_PROJECT_NAME="mp-webapp-dev"
+COMPOSE_PROJECT_NAME="mp-app-dev"
 COMPOSE_PROJECT_HOST="127.0.0.1"
 COMPOSE_PROJECT_PORT=7501
-COMPOSE_PROJECT_PATH="../../../webapp"
+COMPOSE_PROJECT_PATH="../../../application"
 COMPOSE_PROJECT_MEM="512M"
 COMPOSE_PROJECT_SWAP="1G"
 COMPOSE_PROJECT_USER="myproj"
@@ -88,28 +88,31 @@ COMPOSE_PROJECT_GROUP="myproj"
 
 <span style="color: green;"><b>Using GNU Make</b></span> from root directory to configure the container environment, create the root `./.env` file from the [./.env.example](./.env.example) and follow its variables description to set the correct values. The end result would be like this:
 ```bash
-SUDO=sudo
-DOCKER=sudo docker
-DOCKER_COMPOSE=sudo docker compose
+# REMOVE COMMENTS WHEN COPY THIS FILE AND TRIM TRAILING WHITESPACES
+# Ask the team for recommended values
 
-PROJECT_NAME="MY PROJECT NAME"
-PROJECT_LEAD=myproj
-PROJECT_HOST="127.0.0.1"
-PROJECT_CNET=mp-dev
+# DOCKER VARIABLES FOR AUTOMATION
+SUDO=sudo                                               # <- how local user executes system commands - leave it empty if not necessary ----------------------> #
+DOCKER=sudo docker                                      # <- how local user executes Docker commands --------------------------------------------------------> #
+DOCKER_COMPOSE=sudo docker compose                      # <- how local user executes "docker compose" or docker-compose command -----------------------------> #
 
-WEBAPP_PLTF=nginx-nodejs
-WEBAPP_IMGK=alpine3.22-nginx1.26-njs22.16
-WEBAPP_PORT=7501
-WEBAPP_BIND="../../../webapp"
-WEBAPP_CAAS=mp-webapp-dev
-WEBAPP_CAAS_USER=myproj
-WEBAPP_CAAS_GROUP=myproj
-WEBAPP_CAAS_MEM=512M
-WEBAPP_CAAS_SWAP=1G
-WEBAPP_GIT_SSH=~/.ssh/id_rsa
-WEBAPP_GIT_HOST=github.org
-WEBAPP_GIT_BRANCH=develop
-WEBAPP_DOMAIN=
+# CONTAINERS BASE INFORMATION FOR BUILDING WITH docker-compose.yml
+PROJECT_NAME="PLATFORMS DOCKER"                         # <- project name will be used for automation outputs -----------------------------------------------> #
+PROJECT_LEAD=abbr                                       # <- abbreviation or acronym name as part of the container tag that is useful relationship naming ---> #
+PROJECT_HOST="127.0.0.1"                                # <- machine hostname referrer - not necessary for this project -------------------------------------> #
+PROJECT_CNET=mp-dev                                     # <- useful when a network is required for container connections between each other -----------------> #
+
+# WEBAPP - LOCAL
+WEBAPP_PLTF=nginx-nodejs-25                             # <- platform assets directory's name ---------------------------------------------------------------> #
+WEBAPP_IMGK=alpine3.23-nginx-nodejs25                   # <- real main image keys to manage automations for sharing resources -------------------------------> #
+WEBAPP_PORT=7001                                        # <- local machine port opened for container service ------------------------------------------------> #
+WEBAPP_BIND="../../../application"                      # <- path where application is binded from container to local ---------------------------------------> #
+WEBAPP_CAAS=mp-app-dev                                  # <- container name to build the service - it is important to set the environment in this variable --> #
+WEBAPP_CAAS_USER=osuser                                 # <- container's project directory user -------------------------------------------------------------> #
+WEBAPP_CAAS_GROUP=osgroup                               # <- container's project directory group ------------------------------------------------------------> #
+WEBAPP_CAAS_CPUS=2.00                                   # <- container's maximum CPUs usage to apply by docker-compose - leave it empty for full usage ------> #
+WEBAPP_CAAS_MEM=128M                                    # <- container's maximum RAM usage to apply by docker-compose ---------------------------------------> #
+WEBAPP_CAAS_SWAP=512M                                   # <- container's RAM swap space in storage executed by automation command ---------------------------> #
 ```
 
 Once the environment file is set, create each Docker environment file by the automated commands using GNU Make:
@@ -126,9 +129,9 @@ $ make local-hostname
 
 ## <a id="create-containers"></a>Build and run the Web Application Container
 
-For custom configurations, there is a `./platform/nginx-nodejs/docker/config/supervisor/conf.d-sample` directory with **Supervisord** services. Copy the main two services required for the **webapp** container startup.
+For custom configurations, there is a `./platform/nginx-nodejs-25/docker/config/supervisor/conf.d-sample` directory with **Supervisord** services. Copy the main two services required for the **application** container startup.
 ```bash
-$ cd ./platform/nginx-nodejs/docker/config/supervisor
+$ cd ./platform/nginx-nodejs-25/docker/config/supervisor
 $ cp -vn conf.d-sample/nginx.conf conf.d-sample/index.conf conf.d/
 'conf.d-sample/nginx.conf' -> 'conf.d/nginx.conf'
 'conf.d-sample/index.conf' -> 'conf.d/index.conf'
@@ -141,9 +144,9 @@ NGINX 404 ERROR
 ```
 <br>
 
-To preview the successful installation on browser, there is a basic landing page sample at `./resources/webapp-sample/`. Copy its content into `./webapp` directory
+To preview the successful installation on browser, there is a basic landing page sample at `./resources/application-sample/`. Copy its content into `./application` directory
 ```bash
-$ cp -a ./resources/webapp-sample/. ./webapp
+$ cp -a ./resources/application-sample/. ./application
 ```
 
 Create and start up the web app container
@@ -152,7 +155,7 @@ $ make webapp-create
 ```
 <br>
 
-For any further change in the binded `./webapp` directory, access into the container to install require NodeJS packages and restart the container
+For any further change in the binded `./application` directory, access into the container to install require NodeJS packages and restart the container
 ```bash
 $ make webapp-ssh
 
@@ -163,6 +166,7 @@ $ make webapp-ssh
 
 # Option 2: restart container
 /var/www $ exit
+
 $ make webapp-restart
 ```
 <br>
@@ -185,12 +189,14 @@ $ make webapp-info
 
 PLATFORMS DOCKER: NGINX - NODEJS 25
 Container ID.: 6dcc29b09476
-Name.........: abbr-mp-webapp-dev                             # Container name
-Image........: abbr-mp-webapp-dev:alpine3.23-nginx-nodejs25   # Container image
-Memory.......: 128M
-Host.........: 127.0.0.1:7001                                 # Address binded to container port 80
-Hostname.....: 192.168.1.41:7001                              # Local Hostname
-Docker.Host..: 172.18.0.2                                     # Docker IP
+Name.........: abbr-mp-app-dev                              # container name
+Image........: abbr-mp-app-dev:alpine3.23-nginx-nodejs25    # container image
+CPUs.........: 2.00                                         # max. cpus uses the container from local machine
+RAM..........: 256M                                         # max. memory uses the container from local machine
+Swap.........: 512M                                         # swap memory on container's volume
+Host.........: 127.0.0.1:7001                               # address binded to container port 80
+Hostname.....: 192.168.1.41:7001                            # local hostname
+Docker.Host..: 172.18.0.2                                   # Docker IP
 NetworkID....: 8cf47eba68e3fabc1365de3eaff0330c22ee8519e34dd338a791d2ca7d40768f
 ```
 <br>
@@ -214,16 +220,16 @@ $ make help                           shows this Makefile help message
 $ make local-hostname                 shows local machine ip and container ports set
 $ make local-ownership                shows local ownership
 $ make local-ownership-set            sets recursively local root directory ownership
-$ make webapp-hostcheck               shows this project ports availability on local machine for webapp container
-$ make webapp-info                    shows the webapp docker related information
-$ make webapp-set                     sets the webapp enviroment file to build the container
-$ make webapp-create                  creates the webapp container from Docker image
-$ make webapp-network                 creates the webapp container network - execute this recipe first before others
-$ make webapp-ssh                     enters the webapp container shell
-$ make webapp-start                   starts the webapp container running
-$ make webapp-stop                    stops the webapp container but its assets will not be destroyed
-$ make webapp-restart                 restarts the running webapp container
-$ make webapp-destroy                 destroys completly the webapp container
+$ make webapp-hostcheck               shows this project ports availability on local machine for application container
+$ make webapp-info                    shows the application docker related information
+$ make webapp-set                     sets the application enviroment file to build the container
+$ make webapp-create                  creates the application container from Docker image
+$ make webapp-network                 creates the application container network - execute this recipe first before others
+$ make webapp-ssh                     enters the application container shell
+$ make webapp-start                   starts the application container running
+$ make webapp-stop                    stops the application container but its assets will not be destroyed
+$ make webapp-restart                 restarts the running application container
+$ make webapp-destroy                 destroys completly the application container
 $ make repo-flush                     echoes clearing commands for git repository cache on local IDE and sub-repository tracking remove
 $ make repo-commit                    echoes common git commands
 ```
@@ -231,16 +237,15 @@ $ make repo-commit                    echoes common git commands
 
 ## <a id="platform-usage"></a>Use this Platform Repository for your Web Application Project
 
-Clone the platforms repository
-```bash
-$ git clone https://github.com/pabloripoll/docker-platform-nginx-nodejs-22
-$ cd docker-platform-nginx-nodejs-22
-```
+Platform Documentation:
+
+- [NGINX + NODEJS 25](./platform/nginx-nodejs-25/README.md)
+<br><br>
 
 Repository directories structure overview:
 ```
 .
-├── webapp (Vue, Angular, React, Svelte, etc.)
+├── application (Vue, Angular, React, Svelte, etc.)
 │   ├── node_modules
 │   ├── index.js
 │   ├── package.json
@@ -265,35 +270,35 @@ Repository directories structure overview:
 
 Here’s a step-by-step guide for using this Platform repository along with your own web application:
 
-- Remove the existing `./webapp` directory contents from local and from git cache
-- Install your desired repository inside `./webapp`
+- Remove the existing `./application` directory contents from local and from git cache
+- Install your desired repository inside `./application`
 - Choose between Git submodule and detached repository approaches
 <br>
 
-## Managing the `webapp` Directory: Submodule vs Detached Repository
+## Managing the `application` Directory: Submodule vs Detached Repository
 
-To remove the `./webapp` directory with the default installation content and install your desired repository inside it, there are two alternatives for managing both the platform and webapp repositories independently:
+To remove the `./application` directory with the default installation content and install your desired repository inside it, there are two alternatives for managing both the platform and application repositories independently:
 
 ### 1. **GIT Sub-module**
 
 > Git commands can be executed **only from inside the container**.
 
-- Remove `webapp` from local and git cache:
+- Remove `application` from local and git cache:
   ```bash
-  $ rm -rfv ./webapp/* ./webapp/.[!.]*$
-  $ git rm -r --cached webapp
-  $ git commit -m "Remove webapp directory and its default installation"
+  $ rm -rfv ./application/* ./application/.[!.]*$
+  $ git rm -r --cached application
+  $ git commit -m "Remove application directory and its default installation"
   ```
 
 - Add the desired repository as a submodule:
   ```bash
-  $ git submodule add git@[vcs]:[account]/[repository].git ./webapp
-  $ git commit -m "Add webapp as a git submodule"
+  $ git submodule add git@[vcs]:[account]/[repository].git ./application
+  $ git commit -m "Add application as a git submodule"
   ```
 
 - To update submodule contents:
   ```bash
-  $ cd ./webapp
+  $ cd ./application
   $ git pull origin main  # or desired branch
   ```
 
@@ -308,34 +313,34 @@ To remove the `./webapp` directory with the default installation content and ins
 
 > Git commands can be executed **whether from inside the container or on the local machine**.
 
-- Remove `webapp` from local and git cache:
+- Remove `application` from local and git cache:
   ```bash
-  $ rm -rfv ./webapp/* ./webapp/.[!.]*
-  $ git rm -r --cached webapp
+  $ rm -rfv ./application/* ./application/.[!.]*
+  $ git rm -r --cached application
   $ git clean -fd
   $ git reset --hard
-  $ git commit -m "Remove webapp directory and its default installation"
+  $ git commit -m "Remove application directory and its default installation"
   ```
 
 - Clone the desired repository as a detached repository:
   ```bash
-  $ git clone git@[vcs]:[account]/[repository].git ./webapp
+  $ git clone git@[vcs]:[account]/[repository].git ./application
   ```
 
-- The `webapp` directory is now an **independent repository**, not tracked as a submodule in your main repo. You can use `git` commands freely inside `webapp` from anywhere.
+- The `application` directory is now an **independent repository**, not tracked as a submodule in your main repo. You can use `git` commands freely inside `application` from anywhere.
 
 ---
 
 #### **Summary Table**
 
-| Approach         | Repo independence | Where to run git commands | Use case                        |
-|------------------|------------------|--------------------------|----------------------------------|
-| Submodule        | Tracked by main  | Inside container         | Main repo controls webapp version|
-| Detached (rec.)  | Fully independent| Local or container       | Maximum flexibility              |
+| Approach         | Repo independence | Where to run git commands | Use case                               |
+|------------------|-------------------|---------------------------|----------------------------------------|
+| Submodule        | Tracked by main   | Inside container          | Main repo controls application version |
+| Detached (rec.)  | Fully independent | Local or container        | Maximum flexibility                    |
 
 ---
 
-Once the container is up, Supervisor will run the sample web application script. See `./platform/nginx-nodejs/docker/config/supervisor/conf.d/nodejs.conf`
+Once the container is up, Supervisor will run the sample web application script. See `./platform/nginx-nodejs-25/docker/config/supervisor/conf.d/nodejs.conf`
 ```bash
 [program:nodejs]
 command=node --watch /var/www/index.js
@@ -349,7 +354,7 @@ startretries=0
 
 > **Note**: If web application main script is other, remember to modify this file or use the other examples.
 
-> After switching to either alternative, consider adding `/webapp` to your `.gitignore` in this main platform repository to prevent accidental tracking *(especially for detached repository)*.
+> After switching to either alternative, consider adding `/application` to your `.gitignore` in this main platform repository to prevent accidental tracking *(especially for detached repository)*.
 
 <br>
 

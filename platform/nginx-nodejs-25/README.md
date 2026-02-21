@@ -11,7 +11,7 @@
 
 Before building the container:
 
-- If no NodeJS app is on `./webapp` *(Or your custom binded directory)*, It would be better to copy the example on it.
+- If no NodeJS app is on `./application` *(Or your custom binded directory)*, It would be better to copy the example on it.
 - set the required configuration files by coping and updating them depending on your project in:
 
 ### NGINX
