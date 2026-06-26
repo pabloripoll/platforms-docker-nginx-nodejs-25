@@ -1,5 +1,5 @@
 # Stage 1: Pull official Node binaries matching Debian Bookworm's glibc environment
-FROM node:24-bookworm-slim AS node-binaries
+FROM node:25-bookworm-slim AS node-binaries
 FROM debian:bookworm-slim
 
 ARG UID=1000

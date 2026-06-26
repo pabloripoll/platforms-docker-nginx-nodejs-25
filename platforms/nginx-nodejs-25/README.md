@@ -33,11 +33,14 @@ Sources:
 
 It can be installed the most known JS **front-end / APP** frameworks:
 
-![Express](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
-![NestJS](https://img.shields.io/badge/nestjs-%23E0234E.svg?style=for-the-badge&logo=nestjs&logoColor=white)
-![Fastify](https://img.shields.io/badge/fastify-%23000000.svg?style=for-the-badge&logo=fastify&logoColor=white)
-![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)
-![NextJS](https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![Angular](https://img.shields.io/badge/angular-%23DD0031.svg?style=for-the-badge&logo=angular&logoColor=white)
+![Vue.js](https://img.shields.io/badge/vue.js-%2335495e.svg?style=for-the-badge&logo=vuedotjs&logoColor=%234FC08D)
+![Svelte](https://img.shields.io/badge/svelte-%23f1413d.svg?style=for-the-badge&logo=svelte&logoColor=white)
+![Astro](https://img.shields.io/badge/astro-%232C2052.svg?style=for-the-badge&logo=astro&logoColor=white)
+![Nuxt JS](https://img.shields.io/badge/Nuxt-002E3B.svg?style=for-the-badge&logo=nuxt&logoColor=#00DC82)
+![Next JS](https://img.shields.io/badge/Next-black.svg?style=for-the-badge&logo=next.js&logoColor=white)
+![jQuery](https://img.shields.io/badge/jquery-%230769AD.svg?style=for-the-badge&logo=jquery&logoColor=white)
 <br>
 
 Take into account that each framework will demand its specific configuration from inside container.
@@ -94,8 +97,8 @@ COMPOSE_PROJECT_PATH="../../../application"             # <- path where applicat
 COMPOSE_PROJECT_CPUS="2.00"                             # <- container's maximum CPUs usage to apply by docker-compose - leave it empty for full usage ------> #
 COMPOSE_PROJECT_MEM="128M"                              # <- container's maximum CPUs usage to apply by docker-compose - leave it empty for full usage ------> #
 COMPOSE_PROJECT_SWAP="256M"                             # <- container's maximum RAM usage to apply by docker-compose ---------------------------------------> #
-COMPOSE_PROJECT_USER="myproj"                           # <- container's project directory user -------------------------------------------------------------> #
-COMPOSE_PROJECT_GROUP="myproj"                          # <- container's project directory group ------------------------------------------------------------> #
+COMPOSE_PROJECT_USER="osuser"                           # <- container's project directory user -------------------------------------------------------------> #
+COMPOSE_PROJECT_GROUP="osgroup"                         # <- container's project directory group ------------------------------------------------------------> #
 ```
 
 <font color="orange"><b>⚠️ IMPORTANT:</b></font>
