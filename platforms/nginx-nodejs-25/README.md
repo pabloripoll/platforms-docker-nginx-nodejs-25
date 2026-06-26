@@ -2,7 +2,7 @@
     <img src="./../../resources/docs/images/pr-banner-long.png">
 </div>
 
-# NGINX + NODEJS 24
+# NGINX + NODEJS 25
 
 - [./main](../../README.md)
 - [Features](#features)
@@ -23,7 +23,7 @@
 Content:
 - Linux Alpine 3.24
 - Linux Debian 12 Slim *(Optional Dockerfile)*
-- NodeJS 24
+- NodeJS 25
 - PNPM
 <br><br>
 
@@ -86,7 +86,7 @@ Require environment variables at `./docker/.env` *(all are customizable)*:
 ```bash
 COMPOSE_PROJECT_LEAD="myproj"                           # <- lead abbreviation or acronym as part of related containers naming rule -------------------------> #
 COMPOSE_PROJECT_CNET="mp-dev"                           # <- useful for networking to connect between containers --------------------------------------------> #
-COMPOSE_PROJECT_IMGK="alpine-3.24-nginx-nodejs-24"      # <- real main image keys to manage automations for sharing resources -------------------------------> #
+COMPOSE_PROJECT_IMGK="alpine-3.24-nginx-nodejs-25"      # <- real main image keys to manage automations for sharing resources -------------------------------> #
 COMPOSE_PROJECT_NAME="mp-webapp-dev"                    # <- container name to build the service - it is important to set the environment in this variable --> #
 COMPOSE_PROJECT_HOST="127.0.0.1"                        # <- machine hostname referrer - not necessary for this project -------------------------------------> #
 COMPOSE_PROJECT_PORT=7501                               # <- local machine port opened for container service ------------------------------------------------> #
@@ -158,21 +158,21 @@ startretries=0
 <br>
 
 To support environment-specific differences, there is a sample supervisor configuration directory:
-`./platform/nginx-nodejs-24/docker/config/supervisor/conf.d-sample`
+`./platform/nginx-nodejs-25/docker/config/supervisor/conf.d-sample`
 
 Before building the container you must copy that directory to:
-`./platform/nginx-nodejs-24/docker/config/supervisor/conf.d`
+`./platform/nginx-nodejs-25/docker/config/supervisor/conf.d`
 
 Make sure the copied conf.d contains at least the service files needed to run Nginx and Nodejs (for example, supervisor program entries for nginx and nodejs).
 
 ```bash
-$ cd ./platform/nginx-nodejs-24/docker/config/supervisor
+$ cd ./platform/nginx-nodejs-25/docker/config/supervisor
 $ cp -vn conf.d-sample/nginx.conf conf.d-sample/nodejs.conf conf.d/
 'conf.d-sample/nginx.conf' -> 'conf.d/nginx.conf'
 'conf.d-sample/nodejs.conf' -> 'conf.d/nodejs.conf'
 ```
 
-This approach lets developers run additional worker processes locally without changing the shared platform settings. If you need to update Nginx, PHP, or supervisord configurations on a running container, there are Makefile recipes in `./platform/nginx-nodejs-24/Makefile` that can apply changes *(reload or update services)* without destroying and rebuilding the container. Check the Makefile for available targets and usage by executing `$ make help` in its directory.
+This approach lets developers run additional worker processes locally without changing the shared platform settings. If you need to update Nginx, PHP, or supervisord configurations on a running container, there are Makefile recipes in `./platform/nginx-nodejs-25/Makefile` that can apply changes *(reload or update services)* without destroying and rebuilding the container. Check the Makefile for available targets and usage by executing `$ make help` in its directory.
 
 > Note: Though this platform aim is for Front-End web application, it also can be used for monolith REST/GRPC API services.
 <br><br>
